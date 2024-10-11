@@ -117,7 +117,7 @@ namespace TTGamesExplorerRebirthLib.Formats
                 }
 
                 Chars[i].UnicodeChar      = Convert.ToChar(reader.ReadUInt16BigEndian());
-                Chars[i].FontMappingIndex = reader.ReadUInt16();
+                Chars[i].FontMappingIndex = reader.ReadUInt16BigEndian();
             }
 
             // Read image section.
@@ -127,9 +127,14 @@ namespace TTGamesExplorerRebirthLib.Formats
                 throw new InvalidDataException($"{stream.Position:x8}");
             }
 
-            uint imageSectionSize = reader.ReadUInt32(); // Always 0.
+            uint kerningSectionSize = reader.ReadUInt32BigEndian();
+            for(int i = 0; i < kerningSectionSize; i++){
+                char charA = Convert.ToChar(reader.ReadUInt16BigEndian());
+                char charB = Convert.ToChar(reader.ReadUInt16BigEndian());
+                float gap = reader.ReadSingleBigEndian();
+            }
 
-            FontImage = new DDSImage(reader.ReadBytes((int)(stream.Length - headerSize)));
+            FontImage = new DDSImage(reader.ReadBytes((int)(stream.Length - stream.Position)));
         }
     }
 }

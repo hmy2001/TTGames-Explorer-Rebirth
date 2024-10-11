@@ -41,7 +41,7 @@ namespace TTGamesExplorerRebirthUI.Forms
             
             darkComboBox1.Items.Add("None");
             
-            for (int i = 1; i <= _fontFile.Chars.Length; i++)
+            for (int i = 1; i < _fontFile.Chars.Length - 1; i++)
             {
                 darkComboBox1.Items.Add($"Char #{i}");
             }

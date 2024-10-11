@@ -454,9 +454,8 @@ namespace TTGamesExplorerRebirthUI.Forms
             _processManager.KillAllProcesses();
         }
 
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            _processManager.Dispose();
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e){
+            _processManager?.Dispose();
         }
 
         private void toolStripMenuItem1_CheckedChanged(object sender, EventArgs e)
