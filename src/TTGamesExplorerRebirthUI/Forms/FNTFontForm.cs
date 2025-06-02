@@ -12,17 +12,17 @@ using RectangleF = SixLabors.ImageSharp.RectangleF;
 
 namespace TTGamesExplorerRebirthUI.Forms
 {
-    public partial class FontForm : DarkForm
+    public partial class FNTFontForm : DarkForm
     {
         private readonly string _filePath;
-        private readonly FT2 _fontFile;
+        private readonly FNT _fontFile;
 
         private System.Drawing.Image _previewImage;
         private int _previewWidth;
         private int _previewHeight;
         private int _zoomVal = 100;
 
-        public FontForm(string filePath, byte[] fileBuffer)
+        public FNTFontForm(string filePath, byte[] fileBuffer)
         {
             InitializeComponent();
 
@@ -41,9 +41,10 @@ namespace TTGamesExplorerRebirthUI.Forms
             
             darkComboBox1.Items.Add("None");
             
-            for (int i = 1; i < _fontFile.Chars.Length - 1; i++)
+            for (int i = 1; i <= _fontFile.UnicodeTables.Length; i++)
             {
-                darkComboBox1.Items.Add($"Char #{i}");
+                FNTUnicode unicode = _fontFile.UnicodeTables[i - 1];
+                darkComboBox1.Items.Add($"Char #" + i + " [" + unicode.UnicodeChar + "]");
             }
 
             darkComboBox1.SelectedItem = darkComboBox1.Items[0];
@@ -62,32 +63,32 @@ namespace TTGamesExplorerRebirthUI.Forms
 
                 SixLabors.ImageSharp.Image image = _fontFile.FontImage.Images[0].CloneAs<Rgba32>();
 
-                for (int i = 0; i < _fontFile.Chars.Length; i++)
+                for (int i = 0; i < _fontFile.UnicodeTables.Length; i++)
                 {
-                    RectangleF rect = new()
-                    {
-                        X = _fontFile.Chars[i].X,
-                        Y = _fontFile.Chars[i].Y,
-                        Width = _fontFile.Chars[i].Width,
-                        Height = _fontFile.Chars[i].Height,
-                    };
-
-                    image.Mutate(x => x.Fill(Color.FromRgba(255, 0, 0, 120), rect));
+                    uint indexChar = _fontFile.UnicodeTables[i].FontMappingIndex;
+                    if(_fontFile.CharMappingTables.Length > indexChar){
+                        FNTCharMapping charMapping = _fontFile.CharMappingTables[indexChar];
+                        RectangleF rect = new()
+                        {
+                            X = charMapping.X,
+                            Y = charMapping.Y,
+                            Width = charMapping.Width,
+                            Height = charMapping.Height,
+                        };
+                        
+                        image.Mutate(x => x.Fill(Color.FromRgba(255, 0, 0, 120), rect));
+                    }
                 }
 
                 using MemoryStream stream = new();
 
                 image.Save(stream, PngFormat.Instance);
 
-                _zoomVal = trackBar1.Value = 100;
-
-                darkLabel1.Text = $"{_zoomVal}%";
-
                 _previewImage = new Bitmap(stream);
                 _previewWidth = image.Width;
                 _previewHeight = image.Height;
 
-                pictureBox1.Image = new Bitmap(stream);
+                pictureBox1.Image = PictureBoxZoom(_previewImage, new System.Drawing.Size(_previewHeight * _zoomVal / 100, _previewWidth * _zoomVal / 100));
             }
             else
             {
@@ -100,37 +101,34 @@ namespace TTGamesExplorerRebirthUI.Forms
         {
             if (!darkCheckBox1.Checked)
             {
-                int indexChar = 0;
-                
-                if (darkComboBox1.SelectedItem.ToString() != "None")
-                {
-                    indexChar = int.Parse(darkComboBox1.SelectedItem.ToString().Replace("Char #", ""));
-                }
-
-                RectangleF rect = new()
-                {
-                    X = _fontFile.Chars[indexChar].X,
-                    Y = _fontFile.Chars[indexChar].Y,
-                    Width = _fontFile.Chars[indexChar].Width,
-                    Height = _fontFile.Chars[indexChar].Height,
-                };
-
                 using MemoryStream stream = new();
 
                 SixLabors.ImageSharp.Image image = _fontFile.FontImage.Images[0].CloneAs<Rgba32>();
+                
+                if (darkComboBox1.SelectedIndex != 0)
+                {
+                    int indexChar = _fontFile.UnicodeTables[darkComboBox1.SelectedIndex - 1].FontMappingIndex;
 
-                image.Mutate(x => x.Fill(Color.FromRgba(255, 0, 0, 120), rect));
+                    if(_fontFile.CharMappingTables.Length > indexChar){
+                        RectangleF rect = new()
+                        {
+                            X = _fontFile.CharMappingTables[indexChar].X,
+                            Y = _fontFile.CharMappingTables[indexChar].Y,
+                            Width = _fontFile.CharMappingTables[indexChar].Width,
+                            Height = _fontFile.CharMappingTables[indexChar].Height,
+                        };
+
+                        image.Mutate(x => x.Fill(Color.FromRgba(255, 0, 0, 120), rect));
+                    }
+                }
+                
                 image.Save(stream, PngFormat.Instance);
-
-                _zoomVal = trackBar1.Value = 100;
-
-                darkLabel1.Text = $"{_zoomVal}%";
 
                 _previewImage = new Bitmap(stream);
                 _previewWidth = image.Width;
                 _previewHeight = image.Height;
-
-                pictureBox1.Image = new Bitmap(stream);
+                
+                pictureBox1.Image = PictureBoxZoom(_previewImage, new System.Drawing.Size(_previewHeight * _zoomVal / 100, _previewWidth * _zoomVal / 100));
             }
         }
 

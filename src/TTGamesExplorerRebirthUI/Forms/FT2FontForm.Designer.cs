@@ -1,6 +1,6 @@
 ﻿namespace TTGamesExplorerRebirthUI.Forms
 {
-    partial class FontForm
+    partial class FT2FontForm
     {
         /// <summary>
         /// Required designer variable.
@@ -221,7 +221,7 @@
             Controls.Add(splitContainer1);
             Controls.Add(darkStatusStrip1);
             DoubleBuffered = true;
-            Name = "FontForm";
+            Name = "FT2FontForm";
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Font File Viewer";

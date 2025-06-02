@@ -51,7 +51,11 @@ namespace TTGamesExplorerRebirthUI.Forms
 
             if (AppSettings.Instance.GameFolderPath != null)
             {
-                LoadGameFolder(AppSettings.Instance.GameFolderPath);
+                if(Directory.Exists(AppSettings.Instance.GameFolderPath)){
+                    LoadGameFolder(AppSettings.Instance.GameFolderPath);
+                } else{
+                    AppSettings.Instance.GameFolderPath = null;
+                }
             }
 
             keepHookLogsOpenToolStripMenuItem.Checked = AppSettings.Instance.KeepLogsOpen;

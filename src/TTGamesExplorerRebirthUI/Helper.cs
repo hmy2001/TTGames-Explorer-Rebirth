@@ -57,6 +57,7 @@ namespace TTGamesExplorerRebirthUI
                 ".dds" => _bitmapPicture,
                 ".dll" => _bitmapPageGear,
                 ".exe" => _bitmapApplication,
+                ".fnt" => _bitmapFont,
                 ".ft2" => _bitmapFont,
                 ".fpk" => _bitmapBrick,
                 ".ghg" => _bitmapShape3d,
@@ -141,11 +142,19 @@ namespace TTGamesExplorerRebirthUI
                         break;
                     }
 
+                case ".fnt":
+                {
+                    fileBuffer ??= File.ReadAllBytes(path);
+
+                    new FNTFontForm(path, fileBuffer).ShowDialog();
+                    break;
+                }
+                
                 case ".ft2":
                     {
                         fileBuffer ??= File.ReadAllBytes(path);
 
-                        new FontForm(path, fileBuffer).ShowDialog();
+                        new FT2FontForm(path, fileBuffer).ShowDialog();
                         break;
                     }
 

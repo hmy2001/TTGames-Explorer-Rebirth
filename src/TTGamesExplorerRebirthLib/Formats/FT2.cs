@@ -3,12 +3,16 @@ using TTGamesExplorerRebirthLib.Helper;
 
 namespace TTGamesExplorerRebirthLib.Formats
 {
-    public class FT2Char
+    public class FT2CharMapping
     {
         public float  X;
         public float  Y;
         public float  Width;
         public float  Height;
+    }
+    
+    public class FT2Unicode
+    {
         public char   UnicodeChar;
         public ushort FontMappingIndex;
     }
@@ -25,7 +29,8 @@ namespace TTGamesExplorerRebirthLib.Formats
         private const string MagicNfnt = "TNFN";
         private const string MagicVtor = "ROTV";
 
-        public FT2Char[] Chars;
+        public FT2CharMapping[] CharMappingTables;
+        public FT2Unicode[] UnicodeTables;
         public DDSImage  FontImage;
 
         public float MinHeight;
@@ -84,11 +89,11 @@ namespace TTGamesExplorerRebirthLib.Formats
                 throw new InvalidDataException($"{stream.Position:x8}");
             }
 
-            Chars = new FT2Char[unicodeTableItemCount];
+            CharMappingTables = new FT2CharMapping[charsCount];
 
             for (int i = 0; i < charsCount; i++)
             {
-                Chars[i] = new()
+                CharMappingTables[i] = new()
                 {
                     X      = reader.ReadSingleBigEndian(),
                     Y      = reader.ReadSingleBigEndian(),
@@ -109,15 +114,15 @@ namespace TTGamesExplorerRebirthLib.Formats
                 throw new InvalidDataException($"{stream.Position:x8}");
             }
 
+            UnicodeTables = new FT2Unicode[unicodeTableItemCount];
+            
             for (int i = 0; i < unicodeTableItemCount; i++)
             {
-                if (Chars[i] == null)
+                UnicodeTables[i] = new()
                 {
-                    Chars[i] = new();
-                }
-
-                Chars[i].UnicodeChar      = Convert.ToChar(reader.ReadUInt16BigEndian());
-                Chars[i].FontMappingIndex = reader.ReadUInt16BigEndian();
+                    UnicodeChar      = Convert.ToChar(reader.ReadUInt16BigEndian()),
+                    FontMappingIndex = reader.ReadUInt16BigEndian(),
+                };
             }
 
             // Read image section.
