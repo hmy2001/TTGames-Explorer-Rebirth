@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace TTGamesExplorerRebirthLib.Hash
+namespace TTGamesExplorerRebirthLib.Hashes
 {
     public static class Fnv
     {
@@ -33,6 +33,11 @@ namespace TTGamesExplorerRebirthLib.Hash
             }
 
             return hash;
+        }
+
+        public static uint Fnv1_32_PKWin(string text)
+        {
+            return Fnv1_32($"./{text.ToLowerInvariant()}");
         }
 
         public static uint Fnv1_32(string text, bool alternate = false)

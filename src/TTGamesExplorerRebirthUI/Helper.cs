@@ -49,6 +49,7 @@ namespace TTGamesExplorerRebirthUI
             {
                 ".adp" => _bitmapPageWhiteMusic,
                 ".ats" => _bitmapPageWhiteText,
+                ".blob" => _bitmapBorderAll,
                 ".cbx" => _bitmapPageWhiteMusic,
                 ".cfg" => _bitmapPageWhiteText,
                 ".cmo" => _bitmapPicture,
@@ -80,6 +81,12 @@ namespace TTGamesExplorerRebirthUI
                 ".pak" => _bitmapBrick,
                 ".wav" => _bitmapPageWhiteMusic,
                 ".xml" => _bitmapPageCode,
+                ".pkdwin" => _bitmapBrick,
+                ".pkiwin" => _bitmapBrick,
+                ".pkdswitch" => _bitmapBrick,
+                ".pkiswitch" => _bitmapBrick,
+                ".pkdps4" => _bitmapBrick,
+                ".pkips4" => _bitmapBrick,
 
                 _ => _bitmapPageWhite,
             };
@@ -178,6 +185,7 @@ namespace TTGamesExplorerRebirthUI
                         break;
                     }
 
+                case ".blob":
                 case ".pc_shaders":
                     {
                         fileBuffer ??= File.ReadAllBytes(path);
@@ -192,6 +200,17 @@ namespace TTGamesExplorerRebirthUI
                         fileBuffer ??= File.ReadAllBytes(path);
 
                         new ModelForm(path, fileBuffer).ShowDialog();
+                        break;
+                    }
+
+                case ".pkdwin":
+                case ".pkiwin":
+                case ".pkdswitch":
+                case ".pkiswitch":
+                case ".pkdps4":
+                case ".pkips4":
+                    {
+                        new PkForm(path).ShowDialog();
                         break;
                     }
             }
