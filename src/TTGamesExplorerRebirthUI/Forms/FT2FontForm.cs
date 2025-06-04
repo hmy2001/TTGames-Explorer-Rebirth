@@ -66,7 +66,6 @@ namespace TTGamesExplorerRebirthUI.Forms
                 for (int i = 0; i < _fontFile.UnicodeTables.Length; i++)
                 {
                     uint indexChar = _fontFile.UnicodeTables[i].FontMappingIndex;
-                    Console.WriteLine(indexChar);
                     if(_fontFile.CharMappingTables.Length > indexChar){
                         FT2CharMapping charMapping = _fontFile.CharMappingTables[indexChar];
                         RectangleF rect = new()
