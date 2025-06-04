@@ -89,7 +89,7 @@ namespace TTGamesExplorerRebirthUI.Forms
                 _previewWidth = image.Width;
                 _previewHeight = image.Height;
 
-                pictureBox1.Image = PictureBoxZoom(_previewImage, new System.Drawing.Size(_previewHeight * _zoomVal / 100, _previewWidth * _zoomVal / 100));
+                pictureBox1.Image = PictureBoxZoom(_previewImage, new System.Drawing.Size(_previewWidth * _zoomVal / 100, _previewHeight * _zoomVal / 100));
             }
             else
             {
@@ -129,7 +129,7 @@ namespace TTGamesExplorerRebirthUI.Forms
                 _previewWidth = image.Width;
                 _previewHeight = image.Height;
                 
-                pictureBox1.Image = PictureBoxZoom(_previewImage, new System.Drawing.Size(_previewHeight * _zoomVal / 100, _previewWidth * _zoomVal / 100));
+                pictureBox1.Image = PictureBoxZoom(_previewImage, new System.Drawing.Size(_previewWidth * _zoomVal / 100, _previewHeight * _zoomVal / 100));
             }
         }
 
@@ -144,7 +144,7 @@ namespace TTGamesExplorerRebirthUI.Forms
 
             darkLabel1.Text = $"{_zoomVal}%";
 
-            pictureBox1.Image = PictureBoxZoom(_previewImage, new System.Drawing.Size(_previewHeight * _zoomVal / 100, _previewWidth * _zoomVal / 100));
+            pictureBox1.Image = PictureBoxZoom(_previewImage, new System.Drawing.Size(_previewWidth * _zoomVal / 100, _previewHeight * _zoomVal / 100));
         }
 
         public static System.Drawing.Image PictureBoxZoom(System.Drawing.Image img, System.Drawing.Size size)
